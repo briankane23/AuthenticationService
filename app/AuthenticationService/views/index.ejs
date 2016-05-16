@@ -1,0 +1,37 @@
+<!-- Main application view -->
+
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org">
+
+<html>
+	<head>
+		<meta name = "apple-mobile-web-app-capable" content = "yes">
+		<meta name = "mobile-web-app-capable" content = "yes">
+	
+		<!-- JQUERY -->
+		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		
+		<!-- BOOTSTRAP -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" href="index/css/index.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+		<!-- ANGULAR IMPORT -->
+		<script type = "text/javascript" src = "/lib/angular/angular.js"></script>
+		<script type = "text/javascript" src = "/lib/angular-route/angular-route.js"></script>
+		<script type = "text/javascript" src = "/lib/angular-resource/angular-resource.js"></script>
+
+		<!-- APPLICATION IMPORT -->
+		<script type = "text/javascript" src = "/application.js"></script>
+
+		<title><%= title %></title>
+		<script type = "text/javascript"> 
+			//hand the user to the window for angular
+			window.user = <%- user || 'null' %>;
+		</script>
+	</head>
+
+	<body>
+		Content goes here.
+	</body>
+</html>
