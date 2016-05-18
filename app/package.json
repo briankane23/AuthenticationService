@@ -24,5 +24,11 @@
 		"should": "~4.0.4",
 		"supertest": "~0.13.0",
 		"chai": "~2.1.0"
+	},
+
+	"apidoc": {
+		"name": "authentication",
+		"title": "Authentication Service",
+		"version": "0.1.0"
 	}
 }

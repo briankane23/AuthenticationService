@@ -35,5 +35,8 @@ module.exports = function(app) {
     app.route('/api/unauthenticate')
         .get(users.unauthenticate);
 
+    app.route('/api/servicesByToken')
+        .get(users.servicesByToken);
+
     app.get('/signout', users.signout);
 };

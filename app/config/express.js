@@ -57,6 +57,7 @@ module.exports = function() {
 	app.use(express.static('public'));
 
 	//get routing dependencies
+	require('../AuthenticationService/routes/utils.server.routes.js')(app); //should always be first!
 	require('../AuthenticationService/routes/authentication.server.routes.js')(app);
 	
 	return app;

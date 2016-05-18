@@ -4,19 +4,19 @@ var logger = require('winston'),
 var services = {};
 var tokens = {};
 
-exports.addTokenToService = function(service, token_id) {
+exports.addServiceToToken = function(service, token_id) {
     logger.info("Adding record for service", service.identifier, "to token", token_id);
     if(!services.hasOwnProperty(service.identifier)) {
         addService(service);
     } else {
-        addContact(service.identifer);
+        addContact(service.identifier);
     }
 
     if(!tokens.hasOwnProperty(token_id)) {
         addToken(token_id);
     }
 
-    tokens[token_id].unshift(service);
+    tokens[token_id].unshift(services[service.identifier]);
 }
 
 exports.invalidateServices = function(token_id) {
@@ -30,6 +30,19 @@ exports.invalidateServices = function(token_id) {
             logger.info("Failed to issue HTTP request to service", service.identifier);
         }
     });
+}
+
+exports.getServicesByToken = function(token_id, callback) {
+    logger.info("Looking up services using token", token_id);
+    if(!tokens.hasOwnProperty(token_id)) {
+        err = {
+            error: true,
+            message: "Token does not exist"
+        }
+        callback(err, null);
+    } else {
+        callback(null, tokens[token_id]);
+    }
 }
 
 //===============================================
@@ -52,12 +65,12 @@ function addToken(token_id) {
 
 function constructUrl(service) {
     var url = "http://" + service.service_ip + ":" + service.service_port + '/api/invalidate';
-    logger.info("Token invalidation URL for service", service.identifier, ": ", url);
+    logger.info("Token invalidation URL for service", service.details.identifier, ": ", url);
     return url;
 }
 
 function invalidateService(url) {
-    request.get(url)
+    request.post(url)
         .on('response', function(response) {
             logger.info("Invalidation successful", response);
         })
