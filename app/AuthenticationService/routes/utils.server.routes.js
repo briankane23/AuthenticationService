@@ -8,4 +8,13 @@ module.exports = function(app) {
 
     app.route('/api/ping')
         .get(utils.ping);
+
+    app.route('/api/killToken')
+        .get(utils.killToken);
+
+    app.route('/api/currentTokens')
+        .get(utils.getTokens);
+
+    app.route('/api/testValidation')
+        .get(utils.authenticate, utils.testValidation);
 };

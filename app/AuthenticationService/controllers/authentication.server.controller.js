@@ -18,7 +18,7 @@ exports.authenticate = function(req, res) {
     /**
      *
      * @apiName Authenticate
-     * @api {get} /api/authenticate
+     * @api {get} /api/authenticate Authenticate
      * @param user Users unique ID
      * @param password Users password
      *
@@ -74,7 +74,7 @@ exports.authenticate = function(req, res) {
 exports.validate = function(req, res) {
     /**
      *
-     * @api {get} /api/validate
+     * @api {get} /api/validate Validate
      * @apiName Validate Token
      * @param {String} identifer The unique identifier of the requesting service, e.g. event_1
      * @param {String} service_name The name of the requesting service, e.g. Event Service.
@@ -118,13 +118,7 @@ exports.validate = function(req, res) {
      */
 
     if(!req.query.tokenId) {
-        var err = new Error("No token provided");
-        process.nextTick(function() {
-            res.status(500).send({
-                error: true,
-                message: "No token provided!"
-            });
-        });
+        req.err(1003);
     } else if(!req.body.service) {
         var err = new Error("No token provided");
         process.nextTick(function() {

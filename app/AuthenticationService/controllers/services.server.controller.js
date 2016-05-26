@@ -23,7 +23,7 @@ exports.invalidateServices = function(token_id) {
     logger.info("Attempting to invalidate existing accesses across services for token", token_id);
     tokens[token_id].forEach(function(service) {
         logger.info("Invalidating token", token_id, "on service", service.identifier);
-        var url = constructUrl(service);
+        var url = constructUrl(service, token_id);
         try {
             invalidateService(url);
         } catch (ex) {
@@ -63,20 +63,22 @@ function addToken(token_id) {
     tokens[token_id] = [];
 }
 
-function constructUrl(service) {
-    var url = "http://" + service.service_ip + ":" + service.service_port + '/api/invalidate';
+function constructUrl(service, token_id) {
+    var url = "http://" + service.details.service_ip + ":" + service.details.service_port + '/api/killToken' + "?tokenId=" + token_id;
     logger.info("Token invalidation URL for service", service.details.identifier, ": ", url);
     return url;
 }
 
 function invalidateService(url) {
-    request.post(url)
-        .on('response', function(response) {
-            logger.info("Invalidation successful", response);
-        })
-        .on('error', function(err) {
-            logger.info("Failed to invalidate", err);
-        });
+    request.get(url, function(err, response, body) {
+        if(err) {
+            logger.error(err);
+        } else {
+            if(response.statusCode == '200') {
+                logger.info("Invalidation successful", body);
+            } else logger.error("Invalidation failed with res", response.statusCode);
+        }
+    });
 
 }
 

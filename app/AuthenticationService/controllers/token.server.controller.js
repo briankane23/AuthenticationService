@@ -25,11 +25,17 @@ exports.validateToken = function(token_id, ip_address, callback) {
             callback(err, null);
         }
         else if(token.ip_address !== ip_address) {
-            err = {
-                error: true,
-                message: "IP Address does not match"
+            if(token.ip_address != '::1') {
+                logger.error("IP Mismatch:", token.ip_address, ip_address);
+                err = {
+                    error: true,
+                    message: "IP Address does not match"
+                }
+                callback(err, null);
+            } else {
+                logger.info("Local test detected, letting IP mismatch slide.."); //TODO - sort this out!
+                callback(null, token);
             }
-            callback(err, null);
         }
         else {
             callback(null, token);
@@ -72,7 +78,11 @@ function invalidateUserTokens(user) {
     if(userAssignments.hasOwnProperty(user.username)) {
         logger.info("Invalidating existing user token for user", user.username);
         token_id = userAssignments[user.username];
-        invalidateToken(token_id);
+        invalidateToken(token_id, function(err) {
+            if(err) {
+                logger.error("Failed to invalidation token");
+            }
+        });
     };
 }
 
@@ -92,13 +102,17 @@ function invalidateToken(token_id, callback) {
 
 setInterval(function() {
     console.log("", Object.keys(tokens).length, "tokens currently assigned");
-}, 3000);
+}, 100000);
 
 setInterval(function() {
     var now = Date.now();
     Object.keys(tokens).forEach(function(key) {
         if(tokens[key].valid_to < now) {
-            invalidateToken(key);
+            invalidateToken(key, function(err) {
+                if(err) {
+                    log.error("Failed to invalidate token", key);
+                }
+            });
         }
     });
 }, 30000);
